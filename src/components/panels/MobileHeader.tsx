@@ -53,39 +53,27 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
 
     return (
         <>
-            <div className={`mobile-header ${isHidden ? 'hidden-for-support' : ''} ${isLoading ? 'is-loading' : ''}`}>
-                
-                {/* 1. Stationary Brand: Immediately visible, remains stationary */}
-                <div className="mobile-logo-typeface">
+            <div className={`mobile-header-simplified ${isHidden ? 'hidden' : ''}`}>
+                {/* Left: Logo Icon */}
+                <div className="mobile-logo-icon">
                     <img
-                        src={theme === 'light' ? '/logo/infraFLUX_black_bohme_mid.png' : '/logo/infraFLUX_white_bohme_mid.png'}
-                        alt="InfraFlux"
+                        src={theme === 'light' ? '/infrafluxwhite.png' : '/infrafluxblack.png'}
+                        alt="InfraFlux Logo"
                     />
                 </div>
 
-                {/* 2. Unified Bundle: Background, Logo Icon, and Hamburger move as one entity via CSS */}
-                <div className={`mobile-header-bundle ${isVisible ? 'reveal' : ''}`}>
-                    <div className="mobile-header-bg-bar"></div>
-
-                    <div className="mobile-logo">
-                        <img
-                            src={theme === 'light' ? '/infrafluxwhite.png' : '/infrafluxblack.png'}
-                            alt="InfraFlux Logo"
-                        />
-                    </div>
-
-                    <button
-                        className={`mobile-hamburger ${isMenuOpen ? 'active' : ''}`}
-                        onClick={() => {
-                            hapticButton();
-                            onMenuToggle();
-                        }}
-                    >
-                        <div className="hamburger-line"></div>
-                        <div className="hamburger-line"></div>
-                        <div className="hamburger-line"></div>
-                    </button>
-                </div>
+                {/* Right: Hamburger Menu */}
+                <button
+                    className={`mobile-hamburger ${isMenuOpen ? 'active' : ''}`}
+                    onClick={() => {
+                        hapticButton();
+                        onMenuToggle();
+                    }}
+                >
+                    <div className="hamburger-line"></div>
+                    <div className="hamburger-line"></div>
+                    <div className="hamburger-line"></div>
+                </button>
             </div>
 
             {/* Mobile Dropdown Menu (Android/Material Style) */}

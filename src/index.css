@@ -263,12 +263,13 @@ body {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  background: var(--bg-dark);
 }
 
 .maplibregl-map {
   height: 100%;
   width: 100%;
-  background: var(--bg-dark) !important;
+  background: transparent !important;
 }
 
 /* Sidebar Base */
@@ -2109,15 +2110,111 @@ body {
 /* Enhancing Mobile Content Layouts */
 
 
+/* Simplified Mobile Header: Logo (left) - Typeface (center) - Hamburger (right) */
+.mobile-header-simplified {
+  display: flex;
+  position: fixed;
+  top: env(safe-area-inset-top, 0);
+  left: 0;
+  right: 0;
+  z-index: 6000;
+  height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  padding-top: env(safe-area-inset-top, 0);
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  touch-action: none;
+  transition: transform 0.3s ease;
+}
+
+.mobile-header-simplified.hidden {
+  transform: translateY(-100%);
+}
+
+.mobile-logo-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.mobile-logo-icon img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+/* Map Wrapper - Contains logo behind and map in front */
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+
+.globe-logo-container {
+  position: absolute;
+  top: -120px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
+  transform: translateX(-50%) scale(1);
+  animation: globeLogoFadeIn 1.5s ease-out forwards;
+}
+
+@keyframes globeLogoFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes globeLogoFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.globe-logo-container img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.map-canvas-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
 /* Show mobile elements on mobile screens */
 @media (max-width: 767px) {
   :root {
     --item-height: 60px;
   }
 
-  .mobile-header,
+  .mobile-header-simplified,
   .mobile-bottom-bar {
     display: flex;
+  }
+
+  .mobile-header {
+    display: none;
   }
 
   /* Hide desktop floating hamburger on mobile */

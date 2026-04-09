@@ -153,6 +153,13 @@ const MapBase = forwardRef<MapRef, MapProps>(
                 },
                 layers: [
                     {
+                        id: 'background',
+                        type: 'background',
+                        paint: {
+                            'background-color': 'rgba(0, 0, 0, 0)'
+                        }
+                    },
+                    {
                         id: 'carto-tiles-layer',
                         type: 'raster',
                         source: 'carto-tiles',

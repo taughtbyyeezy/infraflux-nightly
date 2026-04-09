@@ -52,6 +52,7 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
     const [selectedIssue, setSelectedIssue] = useState<InfrastructureIssue | null>(null);
     const [zoom, setZoom] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [showGlobeLogo, setShowGlobeLogo] = useState(true);
     const [reportStep, setReportStep] = useState<'form' | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [selectedTypes, setSelectedTypes] = useState<string[]>(['pothole', 'water_logging', 'garbage_dump']);
@@ -99,6 +100,7 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
     const suppressPaddingEffect = useRef(false);
     const lastViewportUpdate = useRef(0);
     const scrollDelayRef = useRef<NodeJS.Timeout | null>(null);
+    const logoRef = useRef<HTMLDivElement>(null);
 
 
     const baseUrl = import.meta.env.VITE_API_URL || '';
@@ -107,6 +109,9 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
     const isStreetLevel = zoom > ZOOM_THRESHOLD;
     const isRotationLocked = isStreetLevel || !!selectedIssue || reportStep === 'form' || isMobileReportOpen;
     const isPanelOpen = isMobile && (!!selectedIssue || isMobileReportOpen);
+
+    // Logo is controlled by zoom level - auto hides when zoom crosses 5.0
+    // No timer needed - CSS transition handles it beautifully
 
     // Initialize menu open on desktop
     useEffect(() => {
@@ -164,6 +169,39 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
     useEffect(() => {
         fetchMapState(currentTime);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // High-performance parallax effect for globe logo
+    useEffect(() => {
+        if (!map || !logoRef.current) return;
+
+        const updateLogoParallax = () => {
+            if (!logoRef.current) return;
+            
+            const currentZoom = map.getZoom();
+            
+            // Calculate opacity: 0.7 at zoom 0, fade to 0 by zoom 4.5
+            let opacity = 0.7 - (currentZoom * (0.7 / 4.5));
+            opacity = Math.max(0, Math.min(0.7, opacity));
+            
+            // Calculate scale: start at 1.0, grow slightly with zoom
+            const scale = 1 + (currentZoom * 0.08);
+            
+            // Apply directly to DOM
+            logoRef.current.style.opacity = opacity.toString();
+            logoRef.current.style.transform = `translateX(-50%) scale(${scale})`;
+        };
+
+        // Initialize
+        updateLogoParallax();
+        
+        // Attach to map zoom event
+        map.on('zoom', updateLogoParallax);
+        
+        // Cleanup
+        return () => {
+            map.off('zoom', updateLogoParallax);
+        };
+    }, [map]);
 
 
     // Effect to lookup MLA when report location changes
@@ -745,8 +783,15 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
             )}
 
             {/* Map Container */}
-            <div style={{ position: 'relative', height: '100%', width: '100%' }}>
-                <Map
+            <div className="map-wrapper">
+                {/* Z-Index 1: The Logo (Behind) - parallax effect controlled by zoom */}
+                <div ref={logoRef} className="globe-logo-container">
+                    <img src="/typefacelogobg.png" alt="InfraFlux" />
+                </div>
+
+                {/* Z-Index 2: The Map (In Front) */}
+                <div className="map-canvas-wrapper">
+                    <Map
                     center={[-98.5795, 39.8283]} // Geographic center of US / Americas
                     zoom={zoom}
                     scrollZoom={true}
@@ -906,7 +951,8 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
                         </MapMarker>
                     )}
                 </Map>
-                <MapLoadingOverlay isLoading={isLoading} theme={theme as 'light' | 'dark'} />
+                </div>
+                <MapLoadingOverlay isLoading={false} theme={theme as 'light' | 'dark'} />
             </div>
 
             {/* Mobile Bottom Bar */}
