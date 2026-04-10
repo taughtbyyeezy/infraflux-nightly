@@ -179,25 +179,23 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
             
             const currentZoom = map.getZoom();
             
-            // Calculate opacity: 0.7 at zoom 0, fade to 0 by zoom 4.5
-            let opacity = 0.7 - (currentZoom * (0.7 / 4.5));
-            opacity = Math.max(0, Math.min(0.7, opacity));
+            // Calculate opacity: 100% from zoom 0-2, fade to 0 by zoom 4
+            let opacity = 1 - Math.max(0, (currentZoom - 2) / 2);
+            opacity = Math.max(0, Math.min(1, opacity));
             
             // Calculate scale: start at 1.0, grow slightly with zoom
-            const scale = 1 + (currentZoom * 0.08);
+            const scale = 1 + (currentZoom * 0.15);
             
-            // Apply directly to DOM
+            // THE FIX: Apply the scale and opacity directly to the PARENT CONTAINER.
+            // Leave the child images alone so their CSS animations can finish smoothly!
             logoRef.current.style.opacity = opacity.toString();
-            logoRef.current.style.transform = `translateX(-50%) scale(${scale})`;
+            logoRef.current.style.transform = `scale(${scale})`;
         };
 
-        // Initialize
+        // Initialize and attach to zoom event
         updateLogoParallax();
-        
-        // Attach to map zoom event
         map.on('zoom', updateLogoParallax);
         
-        // Cleanup
         return () => {
             map.off('zoom', updateLogoParallax);
         };
@@ -786,7 +784,16 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
             <div className="map-wrapper">
                 {/* Z-Index 1: The Logo (Behind) - parallax effect controlled by zoom */}
                 <div ref={logoRef} className="globe-logo-container">
-                    <img src="/typefacelogobg.png" alt="InfraFlux" />
+                    <img 
+                        src={theme === 'light' ? '/infra.png' : '/infra_dark.png'} 
+                        alt="INFRA" 
+                        className="globe-logo-infra" 
+                    />
+                    <img 
+                        src={theme === 'light' ? '/flux.png' : '/flux_dark.png'} 
+                        alt="FLUX" 
+                        className="globe-logo-flux" 
+                    />
                 </div>
 
                 {/* Z-Index 2: The Map (In Front) */}

@@ -2160,26 +2160,38 @@ body {
   background-color: #fff;
 }
 
-.globe-logo-container {
-  position: absolute;
-  top: -120px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-  pointer-events: none;
-  transform: translateX(-50%) scale(1);
-  animation: globeLogoFadeIn 1.5s ease-out forwards;
+/* Dark mode: Set map wrapper background to #1d1d1d */
+.dark-theme .map-wrapper {
+  background-color: #1d1d1d;
 }
 
-@keyframes globeLogoFadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.globe-logo-container {
+    position: absolute;
+    top: -170px;
+    left: 25px;
+    width: 90%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.globe-logo-infra,
+.globe-logo-flux {
+  width: 90%;
+  max-width: 600px;
+  height: auto;
+  transform: translateY(80px);
+  opacity: 0;
+  animation: globeLogoFadeIn 1.5s ease-out 0.2s forwards;
+}
+
+.globe-logo-flux {
+  animation-delay: 0.5s;
 }
 
 @keyframes globeLogoFadeIn {

@@ -32,7 +32,7 @@ export const MapFlyIn: React.FC<MapFlyInProps> = ({ isLoading, targetCenter, tar
         
         const startLng = targetCenter[1] + 720; 
         
-        map.setZoom(0); 
+        map.setZoom(0.2); 
         map.setCenter([startLng, spinLat]);
 
         const startTime = Date.now();
@@ -57,7 +57,7 @@ export const MapFlyIn: React.FC<MapFlyInProps> = ({ isLoading, targetCenter, tar
                     center: [targetCenter[1], targetCenter[0]], 
                     zoom: targetZoom,
                     pitch: 0,
-                    duration: 4000, 
+                    duration: 2000, 
                     curve: 1.4, 
                     essential: true,
                 });
@@ -67,10 +67,6 @@ export const MapFlyIn: React.FC<MapFlyInProps> = ({ isLoading, targetCenter, tar
 
             // 3. Otherwise, keep updating the center to spin the globe
             map.setCenter([currentLng, spinLat]);
-
-            // Zoom grows from 0 to 0.2 during the spin
-            const currentZoom = 0 + (0.2 * Math.min(elapsed / 3000, 1));
-            map.setZoom(currentZoom);
 
             // 4. Have the conditions been met to lock our target?
             if (swoopTargetLng === null && !isLoadingRef.current && elapsed >= minDuration) {
