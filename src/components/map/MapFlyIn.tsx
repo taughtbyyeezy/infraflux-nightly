@@ -57,8 +57,8 @@ export const MapFlyIn: React.FC<MapFlyInProps> = ({ isLoading, targetCenter, tar
                     center: [targetCenter[1], targetCenter[0]], 
                     zoom: targetZoom,
                     pitch: 0,
-                    duration: 2000, 
-                    curve: 1.4, 
+                    duration: 1200, 
+                    curve: 1.6, 
                     essential: true,
                 });
                 

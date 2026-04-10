@@ -803,7 +803,7 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
                 </div>
 
                 {/* Z-Index 2: The Map (In Front) */}
-                <div className="map-canvas-wrapper">
+                <div id="map-container" className="map-canvas-wrapper">
                     <Map
                     center={[-98.5795, 39.8283]} // Geographic center of US / Americas
                     zoom={zoom}

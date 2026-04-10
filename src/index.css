@@ -2188,6 +2188,7 @@ body {
   transform: translateY(80px);
   opacity: 0;
   animation: globeLogoFadeIn 1.5s ease-out 0.2s forwards;
+  will-change: transform, opacity;
 }
 
 .globe-logo-flux {
@@ -2209,9 +2210,16 @@ body {
 }
 
 .map-canvas-wrapper {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    opacity: 0; 
+    transition: opacity 0.3s ease-out;
+}
+
+/* Triggered via Vanilla JS when WebGL shaders compile */
+.map-canvas-wrapper.map-loaded-ready {
+    opacity: 1;
 }
 
 /* Show mobile elements on mobile screens */

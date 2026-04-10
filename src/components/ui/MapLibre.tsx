@@ -192,6 +192,12 @@ const MapBase = forwardRef<MapRef, MapProps>(
 
             map.on('load', () => {
                 setIsLoaded(true);
+                // Add class to parent wrapper for cinematic fade-in
+                const container = map.getContainer();
+                const wrapper = container.parentElement;
+                if (wrapper) {
+                    wrapper.classList.add('map-loaded-ready');
+                }
             });
 
             map.on('move', () => {
