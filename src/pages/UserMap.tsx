@@ -790,16 +790,20 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
             <div className="map-wrapper">
                 {/* Z-Index 1: The Logo (Behind) - parallax effect controlled by zoom */}
                 <div ref={logoRef} className="globe-logo-container">
-                    <img 
-                        src={theme === 'light' ? '/infra.png' : '/infra_dark.png'} 
-                        alt="INFRA" 
-                        className="globe-logo-infra" 
-                    />
-                    <img 
-                        src={theme === 'light' ? '/flux.png' : '/flux_dark.png'} 
-                        alt="FLUX" 
-                        className="globe-logo-flux" 
-                    />
+                    <div className="logo-mask">
+                        <img 
+                            src={theme === 'light' ? '/infra.png' : '/infra_dark.png'} 
+                            alt="INFRA" 
+                            className="globe-logo-infra" 
+                        />
+                    </div>
+                    <div className="logo-mask">
+                        <img 
+                            src={theme === 'light' ? '/flux.png' : '/flux_dark.png'} 
+                            alt="FLUX" 
+                            className="globe-logo-flux" 
+                        />
+                    </div>
                 </div>
 
                 {/* Z-Index 2: The Map (In Front) */}

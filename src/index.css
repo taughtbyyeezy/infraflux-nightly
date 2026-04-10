@@ -1334,26 +1334,39 @@ body {
     pointer-events: none;
 }
 
+.logo-mask {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 .globe-logo-infra,
 .globe-logo-flux {
-  width: 90%;
-  max-width: 600px;
-  height: auto;
-  transform: translateY(80px);
-  opacity: 0;
-  animation: globeLogoFadeIn 1.5s ease-out 0.2s forwards;
-  will-change: transform, opacity;
+    width: 90%;
+    max-width: 600px;
+    height: auto;
+    transform: translateY(300%) skewY(15deg) scaleY(1.2);
+    will-change: transform;
+    opacity: 0;
+    animation: cinematicReveal 1.5s cubic-bezier(0.1, 1, 0.2, 1) forwards;
 }
 
-.globe-logo-flux {
-  animation-delay: 0.5s;
+.globe-logo-infra {
+    animation-delay: 0.12s;
 }
 
-@keyframes globeLogoFadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes cinematicReveal {
+    0% {
+        opacity: 0;
+    }
+    1% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) skewY(0) scaleY(1);
+    }
 }
 
 .globe-logo-container img {
