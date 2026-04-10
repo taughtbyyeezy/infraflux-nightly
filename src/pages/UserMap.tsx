@@ -174,10 +174,16 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
     useEffect(() => {
         if (!map || !logoRef.current) return;
 
+        let lastZoom = map.getZoom();
+
         const updateLogoParallax = () => {
             if (!logoRef.current) return;
             
             const currentZoom = map.getZoom();
+            
+            // Ignore microscopic mobile touch fluctuations
+            if (Math.abs(currentZoom - lastZoom) < 0.01) return;
+            lastZoom = currentZoom;
             
             // Calculate opacity: 100% from zoom 0-2, fade to 0 by zoom 4
             let opacity = 1 - Math.max(0, (currentZoom - 2) / 2);
@@ -186,7 +192,7 @@ const UserMap: React.FC<UserMapProps> = ({ isAdmin = false }) => {
             // Calculate scale: start at 1.0, grow slightly with zoom
             const scale = 1 + (currentZoom * 0.15);
             
-            // THE FIX: Apply the scale and opacity directly to the PARENT CONTAINER.
+            // Apply the scale and opacity directly to the PARENT CONTAINER.
             // Leave the child images alone so their CSS animations can finish smoothly!
             logoRef.current.style.opacity = opacity.toString();
             logoRef.current.style.transform = `scale(${scale})`;
